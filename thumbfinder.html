@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <style>
+    /* css to make things look nicer. colors meant to go with my personal website */
+      .pseudobutton {
+        display: inline-block;
+        padding: 25px;
+        margin: 0 auto;
+        font-size: 1.1em;
+      }
+      
+      .pseudobutton a {
+        background-color: #FFC6AA;
+        color: #3D050F;
+        text-decoration: none;
+        border-radius: 10px;
+        padding: 25px;
+      }
+      
+      .pseudobutton a:hover {
+        background-color: #840B20;
+        color: #FFC6AA;
+        text-decoration: none;
+        border-radius: 10px;
+        padding: 25px;
+      }
+      
+      #results {
+        margin: 25px 25%;
+        text-align: center;
+      }
+    </style>
+  <p>Video link or ID:</p>
+  
+  <input id="vid">
+  
+  <button type="button" onclick="findThumbnails()">Find</button>
+  <br>
+  
+    <p id="errorText"></p>
+  
+  <div id="results" style="display: none;">
+    <!-- display on the div hides the buttons before they're needed -->
+    <p class="pseudobutton"><a id="default" href="" target="_blank">Default</a>
+    <p class="pseudobutton"><a id="standard" href="" target="_blank">Standard</a>
+    <p class="pseudobutton"><a id="medium" href="" target="_blank">Medium</a>
+    <p class="pseudobutton"><a id="high" href="" target="_blank">High</a>
+    <p class="pseudobutton"><a id="maxRes" href="" target="_blank">Max</a>
+  </div>
+  
+  <script>
+  // all the other parts of the links
+  const urlPrefix = 'https://img.youtube.com/vi/';
+  const defaultSuffix = '/default.jpg';
+  const standardSuffix = '/sddefault.jpg';
+  const mediumSuffix = '/mqdefault.jpg';
+  const highSuffix = '/hqdefault.jpg';
+  const maxResSuffix = '/maxresdefault.jpg';
+  function findThumbnails() {
+    // Get the value of the input field with id="vid"
+    let videoId = document.getElementById("vid").value;
+    
+    // Extracts ID from full-length URLs
+    if (videoId.includes('youtube.com/watch?v='))  {
+      let equalPosition = videoId.indexOf('=');
+      videoId = videoId.slice((equalPosition + 1));}
+    else if (videoId.includes('https://youtu.be/')) {
+      videoId = videoId.slice(17);}
+    
+    if (videoId.includes('youtu.be/')) {
+      videoId = videoId.slice(9);}
+    
+    // Removes tracking/timestamp/playlist/whatever
+    if (videoId.includes('?')) {
+      let questionPosition = videoId.indexOf('?');
+      videoId = videoId.slice(0, questionPosition)}
+    
+    if (videoId === "") {
+      document.getElementById("results").style.display = 'none';
+      document.getElementById("errorText").innerHTML = 'No video ID entered, or it was entered incorrectly.  Please try again.';
+    }
+    else {
+      document.getElementById("default").href = urlPrefix + videoId + defaultSuffix;
+      document.getElementById("standard").href = urlPrefix + videoId + standardSuffix;
+      document.getElementById("medium").href = urlPrefix + videoId + mediumSuffix;
+      document.getElementById("high").href = urlPrefix + videoId + highSuffix;
+      document.getElementById("maxRes").href = urlPrefix + videoId + maxResSuffix;
+      document.getElementById("results").style.display = 'block'
+    }
+  }
+  </script>
+</html>
